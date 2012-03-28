@@ -1,0 +1,15 @@
+{
+  "name": "Zabbix_xmpp_ext",
+  "version": "1.0",
+  "description": "Testing!",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "popup": "popup.html",
+    "default_title": "Zabbix_xmpp_ext"
+  },
+  "background_page": "main.html",
+  "options_page":"options.html",
+  "permissions": [
+    "https://localhost/"
+  ]
+}

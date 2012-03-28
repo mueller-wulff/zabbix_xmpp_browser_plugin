@@ -1,0 +1,70 @@
+<html>
+    <head>
+    <script>
+        var req = new XMLHttpRequest();
+
+        req.open( "GET",
+                  localStorage["url"],
+                  true, 
+                  localStorage["user"],
+                  localStorage["passwd"]
+                 );
+
+        req.onload = getContent;
+        req.send(null);
+
+        if ( localStorage["last"] == undefined )
+        {
+            localStorage["last"] = 0;
+        }
+
+        window.setInterval( "reFresh()", localStorage["chkInt"] );
+
+        function getContent() 
+        {
+            var issues = req.responseXML.getElementsByTagName( "issue" );
+            var i = 0;
+            
+            for ( var issue; issue = issues[i]; i++ ) 
+            {
+                var p = document.createElement( "p" );
+                p.innerText = localStorage["last"];
+                p.setAttribute( "problem", issue.getAttribute( "problem" ) );
+                p.setAttribute( "host", issue.getAttribute( "host" ) );
+                document.body.appendChild( p );
+            }
+
+            var delta = i - localStorage["last"];
+            
+            updateBadge( i + '' );
+
+            if ( delta > 0 ) 
+            {
+                playSound();
+            }
+            
+            localStorage["last"] = i;
+        }
+
+        function reFresh() 
+        {
+            location.reload( true )
+        }
+
+        function playSound() 
+        {
+            var sound = document.getElementById( "alarm" );
+            sound.play();
+        }
+
+        function updateBadge( i ) 
+        {
+            chrome.browserAction.setBadgeText( { text : i } );
+        }
+    </script>
+    </head>
+
+    <body>
+        <audio id="alarm" type="audio/wav" src="alarma.wav"></audio>
+    </body>
+</html>

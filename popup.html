@@ -1,0 +1,64 @@
+<html>
+<head>
+    <style type="text/css">
+        body
+        {
+            background-color: #beb9b9;
+            min-width:500px;
+            overflow-x:hidden;
+        }
+        table
+        {
+            font-size:11px;
+        }
+        th
+        {
+            background-color: #e7e7e7
+        }
+        td
+        {
+            background-color: #d7d7d7;
+        }
+    </style>
+
+    <script>
+        
+        function initTable()
+        {
+            node = document.getElementById( "issuetable" );
+            updateTable( localStorage["last"], 2, node );
+        }
+
+        function updateTable( row, col, id )
+        {
+            var myTable = id;
+            var myTableBody = document.createElement("tbody");
+            var rows = chrome.extension.getBackgroundPage().document.getElementsByTagName("p");
+
+            for( var j = 0, row; row = rows[j]; j++ )
+            {
+                myCurrentRow            = document.createElement( "tr" );
+                myCurrentHost           = document.createElement( "td" );
+                myCurrentHost.innerText = row.getAttribute( "host" );
+                myCurrentRow.appendChild(myCurrentHost);
+                myCurrentProb           = document.createElement( "td" );
+                myCurrentProb.innerText = row.getAttribute( "problem" );
+                myCurrentRow.appendChild( myCurrentProb );
+                myTableBody.appendChild( myCurrentRow );
+            }
+
+            myTable.appendChild( myTableBody );
+            return myTable;
+        }
+    </script>
+</head>
+
+<body onload="javascript:initTable()">
+    <table width="495" border="0" cellpadding="0" cellspacing="1" id="issuetable"> 
+        <tr> 
+            <th>Host </td> 
+            <th>Issue </td> 
+        </tr> 
+    </table>
+</body>
+</html>

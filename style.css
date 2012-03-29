@@ -4,14 +4,16 @@ margin: 0;
 margin-left: 0px;
 margin-bottom: 25px;
 padding: 25;
-background-color: #A8C0C0;
-/*background-image: url("/images/rapidrabbit.jpg");*/
+background-color: #beb9b9;
 background-repeat: no-repeat;
 background-position: top right;
-
-font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
-font-size: 13px;
+font-size: 9px;
 color: #333;
+min-width: 500px;
+}
+
+table {
+font-size: 12px;
 }
 
 h1 {
@@ -81,13 +83,18 @@ margin-left: -11px;
 #about-content table {
 margin-top: 10px;
 margin-bottom: 10px;
-font-size: 11px;
+font-size: 9px;
 border-collapse: collapse;
 }
 #about-content td {
 padding: 10px;
 padding-top: 3px;
 padding-bottom: 3px;
+background-color: #d7d7d7
+}
+th
+{
+background-color: #e7e7e7
 }
 #about-content td.name  {color: #555}
 #about-content td.value {color: #000}

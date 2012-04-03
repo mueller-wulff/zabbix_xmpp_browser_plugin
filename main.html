@@ -18,6 +18,11 @@
             localStorage["last"] = 0;
         }
 
+        if ( localStorage["chkInt"] == undefined )
+        {
+            localStorage["chkInt"] = 60000;
+        }
+
         window.setInterval( "reFresh()", localStorage["chkInt"] );
 
         function getContent() 

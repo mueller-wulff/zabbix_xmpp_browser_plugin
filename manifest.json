@@ -10,7 +10,6 @@
   "background_page": "main.html",
   "options_page":"options.html",
   "permissions": [
-    "https://localhost/",
-    "https://vpn.vm.over9000.org/"
+    "https://1.zabbix.over9000.org/"
   ]
 }

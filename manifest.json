@@ -1,6 +1,6 @@
 {
   "name": "Zabbix_xmpp_ext",
-  "version": "1.0",
+  "version": "2.0",
   "description": "Testing!",
   "browser_action": {
     "default_icon": "icon.png",
@@ -10,6 +10,8 @@
   "background_page": "main.html",
   "options_page":"options.html",
   "permissions": [
-    "https://1.zabbix.over9000.org/"
+    "http://1.zabbix.adeven.com/api_jsonrpc.php",
+    "http://1.zabbix.over9000.org/api_jsonrpc.php",
+    "background"
   ]
 }

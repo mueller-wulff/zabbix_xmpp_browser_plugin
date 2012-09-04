@@ -1,75 +1,151 @@
 <html>
-    <head>
-    <script>
-        var req = new XMLHttpRequest();
+<body>
+    <audio id="alarm" type="audio/wav" src="alarma.wav"></audio>
+</body>
 
-        req.open( "GET",
-                  localStorage["url"],
-                  true, 
-                  localStorage["user"],
-                  localStorage["passwd"]
-                 );
+<script>
+   getTrigger(  );
+   if ( localStorage["last"] == undefined )
+   {
+       localStorage["last"] = 0;
+   }
 
-        req.onload = getContent;
-        req.send(null);
+   if ( localStorage["chkInt"] == undefined )
+   {
+       localStorage["chkInt"] = 60000;
+   }
 
-        if ( localStorage["last"] == undefined )
-        {
-            localStorage["last"] = 0;
-        }
+   window.setInterval( "reFresh()", localStorage["chkInt"] );
 
-        if ( localStorage["chkInt"] == undefined )
-        {
-            localStorage["chkInt"] = 60000;
-        }
+   function getAuth( user, passwd, url )
+   {
+       var myAuth;
+       var req = new XMLHttpRequest();
+       //var url = 'http://1.zabbix.over9000.org/api_jsonrpc.php';
+       var params = {
+           "jsonrpc":"2.0",
+           "method":"user.authenticate",
+           "params":{
+               "user": user,
+               "password": passwd
+           }
+           , "id": "0"
+       };
+       req.open( "POST", url, false );
+       req.setRequestHeader( "content-type", "application/json" );
+       req.onreadystatechange = function() 
+       {           
+           if(req.readyState === 4 && req.status === 200)
+           {
+               JSON.parse( req.responseText, function( key, value )
+               {
+                   if( value && key === 'result' )
+                   {
+                       myAuth = value;
+                   }
+               });
+           }
+       }
+       req.send( JSON.stringify(params) ); 
+       return myAuth;
+   }
 
-        window.setInterval( "reFresh()", localStorage["chkInt"] );
+   function getTrigger()
+   {
+       var i = 0;
+       var arr = new Array();
+       var response = new Array();
+       
+       arr.push( new node( localStorage["user1"], localStorage["passwd1"], localStorage["url1"] ) );
+       arr.push( new node( localStorage["user2"], localStorage["passwd2"], localStorage["url2"] ) );
 
-        function getContent() 
-        {
-            var issues = req.responseXML.getElementsByTagName( "issue" );
-            var i = 0;
-            
-            for ( var issue; issue = issues[i]; i++ ) 
-            {
-                var p = document.createElement( "p" );
-                p.innerText = localStorage["last"];
-                p.setAttribute( "problem", issue.getAttribute( "problem" ) );
-                p.setAttribute( "host", issue.getAttribute( "host" ) );
-                document.body.appendChild( p );
-            }
+       for( var j = 0; j < arr.length; j++ )
+       {
+           response.push( makeReq( arr[j] ) );
+       }
 
-            var delta = i - localStorage["last"];
-            
-            updateBadge( i + '' );
+       for( var j = 0; j < response.length; j++ )
+       {
+           var json = JSON.parse( response[j] );
+           for( var k = 0; k < json.result.length; k++ )
+           {
+               if( json.result[k] )
+               {
+                   var p = document.createElement( "p" );
+                   p.innerText = localStorage["last"];
+                   p.setAttribute( "problem", json.result[k].description );
+                   p.setAttribute( "host", json.result[k].host );
+                   document.body.appendChild( p );
+                   i++;
+               }
+           }
+       }
 
-            if ( delta > 0 ) 
-            {
-                playSound();
-            }
-            
-            localStorage["last"] = i;
-        }
 
-        function reFresh() 
-        {
-            location.reload( true )
-        }
+       var delta = i - localStorage["last"];
 
-        function playSound() 
-        {
-            var sound = document.getElementById( "alarm" );
-            sound.play();
-        }
+       updateBadge( i + '' );
 
-        function updateBadge( i ) 
-        {
-            chrome.browserAction.setBadgeText( { text : i } );
-        }
-    </script>
-    </head>
+       if ( delta > 0 ) 
+       {
+           playSound();
+       }
+       
+       localStorage["last"] = i;
 
-    <body>
-        <audio id="alarm" type="audio/wav" src="alarma.wav"></audio>
-    </body>
+   }
+
+   function makeReq( node )
+   {
+       var answer;
+       var req = new XMLHttpRequest();
+       var params = {
+           "jsonrpc":"2.0",
+           "method":"trigger.get",
+           "params": {
+               "output":"extend",
+               "expandData":"host",
+               "filter": {
+                   "value": "1"
+               }
+           },
+           "auth": getAuth( node.user, node.passwd, node.url ),
+           "id": 0
+       };
+       req.open( "POST", node.url, false );
+       req.setRequestHeader( "content-type", "application/json" );
+       req.onreadystatechange = function() 
+       {           
+           if(req.readyState === 4 && req.status === 200)
+           {
+               answer = req.responseText;
+           }
+       }
+       req.send( JSON.stringify(params) );
+       return answer;
+   }
+
+   function node( user, passwd, url )
+   {
+       this.user = user;
+       this.passwd = passwd;
+       this.url = url;
+   }
+
+   function reFresh() 
+   {
+       location.reload( true )
+   }
+
+   function playSound() 
+   {
+       var sound = document.getElementById( "alarm" );
+       sound.play();
+   }
+
+   function updateBadge( i ) 
+   {
+       chrome.browserAction.setBadgeText( { text : i } );
+   }
+</script>
 </html>

@@ -5,23 +5,32 @@
     <script>
  
         function loadOptions() {
-            document.forms[0].user.value      = localStorage["user"]; 
-            document.forms[0].passwd.value    = localStorage["passwd"]; 
-            document.forms[0].url.value       = localStorage["url"]; 
-            document.forms[0].chkInt.value    = localStorage["chkInt"]; 
+            document.forms[0].user.value      = localStorage["user1"]; 
+            document.forms[0].passwd.value    = localStorage["passwd1"]; 
+            document.forms[0].url.value       = localStorage["url1"];
+            document.forms[1].user.value      = localStorage["user2"]; 
+            document.forms[1].passwd.value    = localStorage["passwd2"]; 
+            document.forms[1].url.value       = localStorage["url2"]; 
+            document.forms[2].chkInt.value    = localStorage["chkInt"]; 
         }
 
         function saveOptions() {
-            localStorage["user"]   = document.forms[0].user.value;
-            localStorage["passwd"] = document.forms[0].passwd.value;
-            localStorage["url"]    = document.forms[0].url.value;
-            localStorage["chkInt"]    = document.forms[0].chkInt.value;
+            localStorage["user1"]   = document.forms[0].user.value;
+            localStorage["passwd1"] = document.forms[0].passwd.value;
+            localStorage["url1"]    = document.forms[0].url.value;
+            localStorage["user2"]   = document.forms[1].user.value;
+            localStorage["passwd2"] = document.forms[1].passwd.value;
+            localStorage["url2"]    = document.forms[1].url.value;
+            localStorage["chkInt"]    = document.forms[2].chkInt.value;
         }
  
         function eraseOptions() {
-            localStorage["user"]   = '';
-            localStorage["passwd"] = '';
-            localStorage["url"]    = '';
+            localStorage["user1"]   = '';
+            localStorage["passwd1"] = '';
+            localStorage["url1"]    = '';
+            localStorage["user2"]   = '';
+            localStorage["passwd2"] = '';
+            localStorage["url2"]    = '';
             localStorage["chkInt"] = '';
         }
 
@@ -30,10 +39,17 @@
 <body onload="loadOptions()">
     <h1>Options</h1>
         <form>
-            <p>user:<br><input name="user" type="text" size="30" maxlength="30"></p>
-            <p>pw:<br><input name="passwd" type="password" size="30" maxlength="40"></p>
-            <p>url:<br><input name="url" type="text" size="30" maxlength="40"></p>
-            <p>checkInterval:<br><input name="chkInt" type="text" size="30" maxlength="40"></p>
+            <p>user:<br><input name="user" type="text" size="35" maxlength="30"></p>
+            <p>pw:<br><input name="passwd" type="text" size="35" maxlength="40"></p>
+            <p>url:<br><input name="url" type="text" size="35" maxlength="50"></p>
+        </form>
+        <form>
+            <p>user:<br><input name="user" type="text" size="35" maxlength="30"></p>
+            <p>pw:<br><input name="passwd" type="text" size="35" maxlength="40"></p>
+            <p>url:<br><input name="url" type="text" size="35" maxlength="50"></p>
+        </form>
+        <form>
+            <p>checkInterval:<br><input name="chkInt" type="text" size="35" maxlength="40"></p>
         </form>
     <br />
     <button onclick="saveOptions()">Save</button>
